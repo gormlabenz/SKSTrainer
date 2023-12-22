@@ -1,18 +1,12 @@
 import { StatusBar } from 'expo-status-bar'
-import {
-  Animated,
-  PanResponder,
-  SafeAreaView,
-  ScrollView,
-  Text,
-  View,
-} from 'react-native'
+import { SafeAreaView, ScrollView, Text, View } from 'react-native'
 import schifffahrtsrecht from './lib/data/schifffahrtsrecht'
 import Flashcard from './components/Flashcard'
 import CardStatus from './components/CardStatus'
 import { colors } from './lib/const'
 import Chip from './components/Chip'
-import { useEffect, useRef, useState } from 'react'
+import { useState } from 'react'
+import PanContainer from './components/PanContainer'
 
 export default function App() {
   const [allChips, setAllChips] = useState({
@@ -27,23 +21,9 @@ export default function App() {
     { text: 'Kapitänspatent', isActive: false },
     { text: 'Kapitänspatent', isActive: false },
   ])
-  const [cards, setCards] = useState<
-    { question: string; answer: string; index: number }[]
-  >([])
-
-  useEffect(() => {
-    setCards(schifffahrtsrecht.reverse())
-  }, [])
-
-  const pan = useRef(new Animated.ValueXY()).current
-
-  const handleMove = (moveX: number, moveY: number, strength = 200) => {
-    const distanceMoved = Math.sqrt(moveX ** 2 + moveY ** 2)
-    const resistanceFactor = distanceMoved / strength + 1
-
-    pan.x.setValue(moveX / resistanceFactor)
-    pan.y.setValue(moveY / resistanceFactor)
-  }
+  const [cards, setCards] = useState(
+    schifffahrtsrecht.sort((a, b) => b.index - a.index)
+  )
 
   const calculateTop = (index: number, arrayLength: number) => {
     const reversedIndex = arrayLength - 1 - index
@@ -69,19 +49,9 @@ export default function App() {
     }
   }
 
-  const panResponder = PanResponder.create({
-    onStartShouldSetPanResponder: () => true,
-    onPanResponderMove: (evt, gestureState) => {
-      handleMove(gestureState.dx, gestureState.dy)
-    },
-    onPanResponderRelease: () => {
-      Animated.spring(pan, {
-        toValue: { x: 0, y: 0 },
-        friction: 5,
-        useNativeDriver: false,
-      }).start()
-    },
-  })
+  const removeCard = () => {
+    setCards((prevCards) => prevCards.slice(0, prevCards.length - 1))
+  }
 
   return (
     <View
@@ -136,32 +106,21 @@ export default function App() {
           ))}
         </ScrollView>
         <View style={{ flex: 1, marginTop: 24, marginBottom: 24 }}>
-          {cards.map((data, index) =>
-            index === schifffahrtsrecht.length - 1 ? (
-              <Animated.View
-                key={index}
-                {...(index === schifffahrtsrecht.length - 1
-                  ? panResponder.panHandlers
-                  : {})}
-                style={{
-                  transform: pan.getTranslateTransform(),
-                  position: 'absolute',
-                  width: '100%',
-                  height: '100%',
-                }}
+          {cards.map((card, index) =>
+            index === cards.length - 1 ? (
+              <PanContainer
+                key={card.index}
+                onReleaseLeft={removeCard}
+                onReleaseRight={removeCard}
               >
                 <Flashcard
-                  key={index}
-                  top={calculateTop(index, schifffahrtsrecht.length)}
-                  backgroundColor={calculateColor(
-                    index,
-                    schifffahrtsrecht.length
-                  )}
+                  top={calculateTop(index, cards.length)}
+                  backgroundColor={calculateColor(index, cards.length)}
                 >
                   <CardStatus
                     status="hidden"
-                    index={data.index}
-                    length={schifffahrtsrecht.length}
+                    index={card.index}
+                    length={cards.length}
                   />
                   <Text
                     style={{
@@ -172,23 +131,20 @@ export default function App() {
                       color: colors.white,
                     }}
                   >
-                    {data.question}
+                    {card.question}
                   </Text>
                 </Flashcard>
-              </Animated.View>
+              </PanContainer>
             ) : (
               <Flashcard
-                key={index}
-                top={calculateTop(index, schifffahrtsrecht.length)}
-                backgroundColor={calculateColor(
-                  index,
-                  schifffahrtsrecht.length
-                )}
+                key={card.index}
+                top={calculateTop(index, cards.length)}
+                backgroundColor={calculateColor(index, cards.length)}
               >
                 <CardStatus
                   status="hidden"
-                  index={data.index}
-                  length={schifffahrtsrecht.length}
+                  index={card.index}
+                  length={cards.length}
                 />
                 <Text
                   style={{
@@ -199,7 +155,7 @@ export default function App() {
                     color: colors.white,
                   }}
                 >
-                  {data.question}
+                  {card.question}
                 </Text>
               </Flashcard>
             )

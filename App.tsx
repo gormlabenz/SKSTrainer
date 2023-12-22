@@ -1,5 +1,12 @@
 import { StatusBar } from 'expo-status-bar'
-import { SafeAreaView, Text, TouchableNativeFeedback, View } from 'react-native'
+import {
+  SafeAreaView,
+  ScrollView,
+  Text,
+  TouchableNativeFeedback,
+  TouchableOpacity,
+  View,
+} from 'react-native'
 import Swiper from 'react-native-swiper'
 import FlipCard from 'react-native-flip-card'
 import schifffahrtsrecht from './assets/schifffahrtsrecht.json'
@@ -7,8 +14,21 @@ import Flashcard from './components/Flashcard'
 import CardStatus from './components/CardStatus'
 import { colors } from './lib/const'
 import Chip from './components/Chip'
+import { useState } from 'react'
 
 export default function App() {
+  const [chips, setChips] = useState([
+    {
+      text: 'Alle',
+      isActive: true,
+      borderColors: [colors.yellow, colors.green, colors.blue],
+    },
+    { text: 'Schifffahrtsrecht', isActive: false },
+    { text: 'Kapitänspatent', isActive: false },
+    { text: 'Kapitänspatent', isActive: false },
+    { text: 'Kapitänspatent', isActive: false },
+    { text: 'Kapitänspatent', isActive: false },
+  ])
   return (
     <View
       style={{
@@ -18,24 +38,33 @@ export default function App() {
     >
       <StatusBar style="light" />
       <SafeAreaView style={{ flex: 1, overflow: 'visible' }}>
-        <View style={{ flexDirection: 'row', overflow: 'scroll', padding: 12 }}>
-          <Chip
-            text="Alle"
-            isActive
-            borderColors={[
-              colors.red,
-              colors.orange,
-              colors.yellow,
-              colors.green,
-              colors.blue,
-            ]}
-          />
-          <Chip isActive text="Schifffahrtsrecht" />
-          <Chip text="Kapitänspatent" />
-          <Chip text="Kapitänspatent" />
-          <Chip text="Kapitänspatent" />
-          <Chip text="Kapitänspatent" />
-        </View>
+        <ScrollView
+          horizontal
+          style={{
+            flexDirection: 'row',
+            overflow: 'scroll',
+            padding: 12,
+            flexShrink: 1,
+            flexGrow: 0,
+          }}
+          showsHorizontalScrollIndicator={false}
+        >
+          {chips.map((chip, index) => (
+            <Chip
+              key={index}
+              text={chip.text}
+              isActive={chip.isActive}
+              borderColors={chip.borderColors}
+              onPress={() => {
+                const newChips = chips.map((chip) => ({
+                  ...chip,
+                }))
+                newChips[index].isActive = true
+                setChips(newChips)
+              }}
+            />
+          ))}
+        </ScrollView>
         <Swiper showsPagination={false}>
           {schifffahrtsrecht.map((data) => (
             <View
@@ -88,7 +117,7 @@ export default function App() {
                       justifyContent: 'flex-end',
                     }}
                   >
-                    <TouchableNativeFeedback
+                    <TouchableOpacity
                       onPress={() => {
                         console.log('pressed')
                       }}
@@ -104,7 +133,7 @@ export default function App() {
                       >
                         <Text style={{ fontWeight: 'bold' }}>Verbergen</Text>
                       </View>
-                    </TouchableNativeFeedback>
+                    </TouchableOpacity>
                   </View>
                 </Flashcard>
               </FlipCard>

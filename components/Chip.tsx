@@ -28,15 +28,12 @@ const Chip: FC<Props> = ({ text, isActive, borderColors }: Props) => {
           paddingVertical: 8,
           borderRadius: 20,
           borderColor: colors.white,
-          backgroundColor: isActive ? colors.white : colors.gray[1],
+          backgroundColor: isActive ? colors.gray[2] : colors.gray[1],
         }}
       >
         <Text
           style={{
-            // nowwrap
-            flexShrink: 1,
-
-            color: isActive ? colors.gray[1] : colors.white,
+            color: colors.white,
             fontWeight: 'bold',
           }}
         >

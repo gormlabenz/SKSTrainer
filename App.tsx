@@ -19,7 +19,17 @@ export default function App() {
       <StatusBar style="light" />
       <SafeAreaView style={{ flex: 1, overflow: 'visible' }}>
         <View style={{ flexDirection: 'row', overflow: 'scroll', padding: 12 }}>
-          <Chip isActive text="Alle" />
+          <Chip
+            text="Alle"
+            isActive
+            borderColors={[
+              colors.red,
+              colors.orange,
+              colors.yellow,
+              colors.green,
+              colors.blue,
+            ]}
+          />
           <Chip isActive text="Schifffahrtsrecht" />
           <Chip text="Kapitänspatent" />
           <Chip text="Kapitänspatent" />
@@ -38,7 +48,7 @@ export default function App() {
               <FlipCard perspective={3000} flipHorizontal flipVertical={false}>
                 <Flashcard>
                   <CardStatus
-                    status="shown"
+                    status="hidden"
                     index={data.index}
                     length={schifffahrtsrecht.length}
                   />

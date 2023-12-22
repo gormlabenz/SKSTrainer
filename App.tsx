@@ -13,6 +13,7 @@ import CardStatus from './components/CardStatus'
 import { colors } from './lib/const'
 import Chip from './components/Chip'
 import { useRef, useState } from 'react'
+import PanContainer from './components/PanContainer'
 
 export default function App() {
   const [chips, setChips] = useState([
@@ -27,6 +28,8 @@ export default function App() {
     { text: 'Kapitänspatent', isActive: false },
     { text: 'Kapitänspatent', isActive: false },
   ])
+
+  const schifffahrtsrechtRef = useRef(schifffahrtsrecht.reverse())
 
   const pan = useRef(
     schifffahrtsrecht.map(() => new Animated.ValueXY())
@@ -123,17 +126,8 @@ export default function App() {
           ))}
         </ScrollView>
         <View style={{ flex: 1, marginTop: 24, marginBottom: 24 }}>
-          {schifffahrtsrecht.reverse().map((data, index) => (
-            <Animated.View
-              key={index}
-              {...panResponder[index].panHandlers}
-              style={{
-                transform: pan[index].getTranslateTransform(),
-                position: 'absolute',
-                width: '100%',
-                height: '100%',
-              }}
-            >
+          <PanContainer onMove={handleMove} panArray={pan}>
+            {schifffahrtsrechtRef.current.map((data, index) => (
               <Flashcard
                 top={calculateTop(index, schifffahrtsrecht.length)}
                 backgroundColor={calculateColor(
@@ -158,8 +152,8 @@ export default function App() {
                   {data.question}
                 </Text>
               </Flashcard>
-            </Animated.View>
-          ))}
+            ))}
+          </PanContainer>
         </View>
       </SafeAreaView>
     </View>

@@ -27,29 +27,22 @@ export default function App() {
     { text: 'Kapitänspatent', isActive: false },
     { text: 'Kapitänspatent', isActive: false },
   ])
-
   const [cards, setCards] = useState<
     { question: string; answer: string; index: number }[]
   >([])
+
   useEffect(() => {
     setCards(schifffahrtsrecht.reverse())
   }, [])
 
-  const pan = useRef(
-    schifffahrtsrecht.map(() => new Animated.ValueXY())
-  ).current
+  const pan = useRef(new Animated.ValueXY()).current
 
-  const handleMove = (
-    index: number,
-    moveX: number,
-    moveY: number,
-    strength = 200
-  ) => {
+  const handleMove = (moveX: number, moveY: number, strength = 200) => {
     const distanceMoved = Math.sqrt(moveX ** 2 + moveY ** 2)
     const resistanceFactor = distanceMoved / strength + 1
 
-    pan[index].x.setValue(moveX / resistanceFactor)
-    pan[index].y.setValue(moveY / resistanceFactor)
+    pan.x.setValue(moveX / resistanceFactor)
+    pan.y.setValue(moveY / resistanceFactor)
   }
 
   const calculateTop = (index: number, arrayLength: number) => {
@@ -79,10 +72,10 @@ export default function App() {
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
     onPanResponderMove: (evt, gestureState) => {
-      handleMove(schifffahrtsrecht.length - 1, gestureState.dx, gestureState.dy)
+      handleMove(gestureState.dx, gestureState.dy)
     },
     onPanResponderRelease: () => {
-      Animated.spring(pan[schifffahrtsrecht.length - 1], {
+      Animated.spring(pan, {
         toValue: { x: 0, y: 0 },
         friction: 5,
         useNativeDriver: false,
@@ -151,7 +144,7 @@ export default function App() {
                   ? panResponder.panHandlers
                   : {})}
                 style={{
-                  transform: pan[index].getTranslateTransform(),
+                  transform: pan.getTranslateTransform(),
                   position: 'absolute',
                   width: '100%',
                   height: '100%',

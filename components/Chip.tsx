@@ -12,29 +12,23 @@ interface Props {
 }
 
 const Chip: FC<Props> = ({ text, isActive, borderColors, onPress }: Props) => {
-  // Erstellen Sie eine animierte Wertinstanz für die Hintergrundfarbe
   const backgroundColorAnim = useRef(new Animated.Value(0)).current
 
-  // Interpolieren Sie die Hintergrundfarbe basierend auf dem animierten Wert
   const backgroundColorInterpolated = backgroundColorAnim.interpolate({
     inputRange: [0, 1],
     outputRange: [colors.gray[600], colors.gray[300]],
   })
 
   useEffect(() => {
-    // Animieren der Hintergrundfarbe beim Ändern des isActive-Status
     Animated.timing(backgroundColorAnim, {
       toValue: isActive ? 1 : 0,
-      duration: 300,
+      duration: isActive ? 0 : 100,
       useNativeDriver: false,
     }).start()
   }, [isActive])
 
   const handlePress = () => {
-    // Fügen Sie Haptics Feedback hinzu
     Haptics.selectionAsync()
-
-    // Führen Sie die übergebene onPress Funktion aus
     onPress()
   }
 

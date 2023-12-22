@@ -5,24 +5,36 @@ import { colors } from '../lib/const'
 interface Props {
   children: React.ReactNode
   backgroundColor?: string
+  top: number
 }
 
-const Flashcard: FC<Props> = ({ children, backgroundColor }: Props) => {
+const Flashcard: FC<Props> = ({ children, backgroundColor, top }: Props) => {
   return (
     <View
       style={{
-        backgroundColor: backgroundColor ? backgroundColor : colors.gray[2],
         flex: 1,
-        borderRadius: 16,
-        margin: 1,
-        padding: 12,
-        marginHorizontal: 12,
-        paddingTop: 24,
-        paddingBottom: 12,
+        paddingHorizontal: 12,
+        position: 'absolute',
         height: '100%',
+        width: '100%',
       }}
     >
-      {children}
+      <View
+        style={{
+          backgroundColor: backgroundColor ? backgroundColor : colors.gray[400],
+          flex: 1,
+          borderRadius: 16,
+          margin: 1,
+          padding: 12,
+          paddingTop: 24,
+          paddingBottom: 12,
+          height: '100%',
+          paddingVertical: 24,
+          top,
+        }}
+      >
+        {children}
+      </View>
     </View>
   )
 }

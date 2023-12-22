@@ -1,14 +1,5 @@
 import { StatusBar } from 'expo-status-bar'
-import {
-  SafeAreaView,
-  ScrollView,
-  Text,
-  TouchableNativeFeedback,
-  TouchableOpacity,
-  View,
-} from 'react-native'
-import Swiper from 'react-native-swiper'
-import FlipCard from 'react-native-flip-card'
+import { SafeAreaView, ScrollView, Text, View } from 'react-native'
 import schifffahrtsrecht from './assets/schifffahrtsrecht.json'
 import Flashcard from './components/Flashcard'
 import CardStatus from './components/CardStatus'
@@ -37,11 +28,28 @@ export default function App() {
     }
     return 0
   }
+
+  const calculateColor = (index: number, arrayLength: number) => {
+    const reversedIndex = arrayLength - 1 - index
+    switch (reversedIndex) {
+      case 0:
+        return colors.gray[400]
+      case 1:
+        return colors.gray[350]
+      case 2:
+        return colors.gray[300]
+      case 3:
+        return colors.gray[250]
+      default:
+        return colors.gray[200]
+    }
+  }
+
   return (
     <View
       style={{
         flex: 1,
-        backgroundColor: colors.gray[1],
+        backgroundColor: colors.gray[500],
       }}
     >
       <StatusBar style="light" />
@@ -51,9 +59,10 @@ export default function App() {
           style={{
             flexDirection: 'row',
             overflow: 'scroll',
-            padding: 12,
+            paddingHorizontal: 12,
             flexShrink: 1,
             flexGrow: 0,
+            marginTop: 12,
           }}
           showsHorizontalScrollIndicator={false}
         >
@@ -73,38 +82,29 @@ export default function App() {
             />
           ))}
         </ScrollView>
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, marginTop: 24, marginBottom: 24 }}>
           {schifffahrtsrecht.reverse().map((data, index) => (
-            <View
-              key={index}
-              style={{
-                flex: 1,
-                paddingVertical: 24,
-                position: 'absolute',
-                height: '100%',
-                width: '100%',
-                top: calculateTop(index, schifffahrtsrecht.length),
-              }}
+            <Flashcard
+              top={calculateTop(index, schifffahrtsrecht.length)}
+              backgroundColor={calculateColor(index, schifffahrtsrecht.length)}
             >
-              <Flashcard>
-                <CardStatus
-                  status="hidden"
-                  index={data.index}
-                  length={schifffahrtsrecht.length}
-                />
-                <Text
-                  style={{
-                    fontSize: 28,
-                    fontWeight: 'bold',
-                    marginTop: 28,
-                    marginBottom: 6,
-                    color: colors.white,
-                  }}
-                >
-                  {data.question}
-                </Text>
-              </Flashcard>
-            </View>
+              <CardStatus
+                status="hidden"
+                index={data.index}
+                length={schifffahrtsrecht.length}
+              />
+              <Text
+                style={{
+                  fontSize: 28,
+                  fontWeight: 'bold',
+                  marginTop: 28,
+                  marginBottom: 6,
+                  color: colors.white,
+                }}
+              >
+                {data.question}
+              </Text>
+            </Flashcard>
           ))}
         </View>
       </SafeAreaView>

@@ -4,13 +4,14 @@ import { colors } from '../lib/const'
 
 interface Props {
   children: React.ReactNode
+  backgroundColor?: string
 }
 
-const Flashcard: FC<Props> = ({ children }: Props) => {
+const Flashcard: FC<Props> = ({ children, backgroundColor }: Props) => {
   return (
     <View
       style={{
-        backgroundColor: colors.gray[2],
+        backgroundColor: backgroundColor ? backgroundColor : colors.gray[2],
         flex: 1,
         borderRadius: 16,
         margin: 1,
@@ -18,6 +19,7 @@ const Flashcard: FC<Props> = ({ children }: Props) => {
         marginHorizontal: 12,
         paddingTop: 24,
         paddingBottom: 12,
+        height: '100%',
       }}
     >
       {children}

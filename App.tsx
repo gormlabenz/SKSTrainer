@@ -29,6 +29,14 @@ export default function App() {
     { text: 'Kapitänspatent', isActive: false },
     { text: 'Kapitänspatent', isActive: false },
   ])
+
+  const calculateTop = (index: number, arrayLength: number) => {
+    const reversedIndex = arrayLength - 1 - index
+    if (reversedIndex < 4) {
+      return 24 * Math.exp(-reversedIndex)
+    }
+    return 0
+  }
   return (
     <View
       style={{
@@ -65,81 +73,40 @@ export default function App() {
             />
           ))}
         </ScrollView>
-        <Swiper showsPagination={false}>
-          {schifffahrtsrecht.map((data) => (
+        <View style={{ flex: 1 }}>
+          {schifffahrtsrecht.reverse().map((data, index) => (
             <View
-              key={1}
+              key={index}
               style={{
                 flex: 1,
                 paddingVertical: 24,
+                position: 'absolute',
+                height: '100%',
+                width: '100%',
+                top: calculateTop(index, schifffahrtsrecht.length),
               }}
             >
-              <FlipCard perspective={3000} flipHorizontal flipVertical={false}>
-                <Flashcard>
-                  <CardStatus
-                    status="hidden"
-                    index={data.index}
-                    length={schifffahrtsrecht.length}
-                  />
-                  <Text
-                    style={{
-                      fontSize: 28,
-                      fontWeight: 'bold',
-                      marginTop: 28,
-                      marginBottom: 6,
-                      color: colors.white,
-                    }}
-                  >
-                    {data.question}
-                  </Text>
-                </Flashcard>
-                <Flashcard>
-                  <CardStatus
-                    index={data.index}
-                    length={schifffahrtsrecht.length}
-                    status="hidden"
-                  />
-                  <Text
-                    style={{
-                      fontSize: 24,
-                      fontWeight: 'bold',
-                      marginTop: 28,
-                      marginBottom: 6,
-                      opacity: 0.5,
-                      color: colors.white,
-                    }}
-                  >
-                    {data.answer}
-                  </Text>
-                  <View
-                    style={{
-                      flex: 1,
-                      justifyContent: 'flex-end',
-                    }}
-                  >
-                    <TouchableOpacity
-                      onPress={() => {
-                        console.log('pressed')
-                      }}
-                    >
-                      <View
-                        style={{
-                          backgroundColor: colors.white,
-                          padding: 12,
-                          borderRadius: 6,
-                          width: '100%',
-                          alignItems: 'center',
-                        }}
-                      >
-                        <Text style={{ fontWeight: 'bold' }}>Verbergen</Text>
-                      </View>
-                    </TouchableOpacity>
-                  </View>
-                </Flashcard>
-              </FlipCard>
+              <Flashcard>
+                <CardStatus
+                  status="hidden"
+                  index={data.index}
+                  length={schifffahrtsrecht.length}
+                />
+                <Text
+                  style={{
+                    fontSize: 28,
+                    fontWeight: 'bold',
+                    marginTop: 28,
+                    marginBottom: 6,
+                    color: colors.white,
+                  }}
+                >
+                  {data.question}
+                </Text>
+              </Flashcard>
             </View>
           ))}
-        </Swiper>
+        </View>
       </SafeAreaView>
     </View>
   )

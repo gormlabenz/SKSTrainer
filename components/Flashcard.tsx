@@ -1,5 +1,5 @@
-import { FC, useEffect, useRef, useState } from 'react'
-import { Animated, Text, View } from 'react-native'
+import React, { FC, useEffect, useRef } from 'react'
+import { Animated, View } from 'react-native'
 import PanContainer from './PanContainer'
 
 interface Props {
@@ -21,6 +21,15 @@ const Flashcard: FC<Props> = ({
   onRelease,
   afterRelease,
 }: Props) => {
+  const animatedTop = useRef(new Animated.Value(top)).current
+
+  useEffect(() => {
+    Animated.spring(animatedTop, {
+      toValue: top,
+      useNativeDriver: false,
+    }).start()
+  }, [top])
+
   return (
     <PanContainer
       afterReleaseLeft={afterReleaseLeft}
@@ -37,7 +46,7 @@ const Flashcard: FC<Props> = ({
           width: '100%',
         }}
       >
-        <View
+        <Animated.View
           style={{
             backgroundColor,
             flex: 1,
@@ -48,11 +57,11 @@ const Flashcard: FC<Props> = ({
             paddingBottom: 12,
             height: '100%',
             paddingVertical: 24,
-            top,
+            top: animatedTop,
           }}
         >
           {children}
-        </View>
+        </Animated.View>
       </View>
     </PanContainer>
   )

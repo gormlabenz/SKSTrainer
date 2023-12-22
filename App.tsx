@@ -122,11 +122,7 @@ export default function App() {
               afterReleaseLeft={removeCard}
               afterReleaseRight={removeCard}
               onRelease={() => setIndexController(indexController + 1)}
-              afterRelease={() =>
-                setIndexController(
-                  indexController - 1 > 0 ? indexController - 1 : 0
-                )
-              }
+              afterRelease={() => setIndexController(indexController - 1)}
             >
               <CardStatus
                 status="hidden"

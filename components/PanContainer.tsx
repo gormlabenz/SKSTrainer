@@ -31,8 +31,6 @@ const PanContainer: FC<Props> = ({
       handleMove(gestureState.dx, gestureState.dy)
     },
     onPanResponderRelease: (evt, gestureState) => {
-      console.log(gestureState.dx)
-
       if (gestureState.dx > 150) {
         onRelease()
         Animated.spring(pan, {
@@ -43,7 +41,6 @@ const PanContainer: FC<Props> = ({
           afterReleaseRight()
           afterRelease()
         })
-        console.log('right')
       } else if (gestureState.dx < -150) {
         onRelease()
         Animated.spring(pan, {
@@ -54,7 +51,6 @@ const PanContainer: FC<Props> = ({
           afterReleaseLeft()
           afterRelease()
         })
-        console.log('left')
       } else {
         Animated.spring(pan, {
           toValue: { x: 0, y: 0 },

@@ -3,14 +3,18 @@ import { Animated, PanResponder } from 'react-native'
 
 interface Props {
   children: React.ReactNode
-  onReleaseLeft: () => void
-  onReleaseRight: () => void
+  afterReleaseLeft: () => void
+  afterReleaseRight: () => void
+  onRelease: () => void
+  afterRelease: () => void
 }
 
 const PanContainer: FC<Props> = ({
   children,
-  onReleaseLeft,
-  onReleaseRight,
+  afterReleaseLeft,
+  afterReleaseRight,
+  onRelease,
+  afterRelease,
 }: Props) => {
   const pan = useRef(new Animated.ValueXY()).current
 
@@ -28,28 +32,34 @@ const PanContainer: FC<Props> = ({
     },
     onPanResponderRelease: (evt, gestureState) => {
       console.log(gestureState.dx)
+
       if (gestureState.dx > 150) {
+        onRelease()
         Animated.spring(pan, {
           toValue: { x: 500, y: 0 },
           friction: 5,
           useNativeDriver: false,
-          tension: 100,
-        }).start(() => onReleaseRight())
+        }).start(() => {
+          afterReleaseRight()
+          afterRelease()
+        })
         console.log('right')
       } else if (gestureState.dx < -150) {
+        onRelease()
         Animated.spring(pan, {
           toValue: { x: -500, y: 0 },
           friction: 5,
           useNativeDriver: false,
-          tension: 100,
-        }).start(() => onReleaseLeft())
+        }).start(() => {
+          afterReleaseLeft()
+          afterRelease()
+        })
         console.log('left')
       } else {
         Animated.spring(pan, {
           toValue: { x: 0, y: 0 },
           friction: 5,
           useNativeDriver: false,
-          tension: 100,
         }).start()
       }
     },

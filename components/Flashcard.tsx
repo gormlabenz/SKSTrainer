@@ -6,19 +6,28 @@ interface Props {
   children: React.ReactNode
   backgroundColor: string
   top: number
-  onReleaseLeft: () => void
-  onReleaseRight: () => void
+  afterReleaseLeft: () => void
+  afterReleaseRight: () => void
+  onRelease: () => void
+  afterRelease: () => void
 }
 
 const Flashcard: FC<Props> = ({
   children,
   backgroundColor,
   top,
-  onReleaseLeft,
-  onReleaseRight,
+  afterReleaseLeft,
+  afterReleaseRight,
+  onRelease,
+  afterRelease,
 }: Props) => {
   return (
-    <PanContainer onReleaseLeft={onReleaseLeft} onReleaseRight={onReleaseRight}>
+    <PanContainer
+      afterReleaseLeft={afterReleaseLeft}
+      afterReleaseRight={afterReleaseRight}
+      onRelease={onRelease}
+      afterRelease={afterRelease}
+    >
       <View
         style={{
           flex: 1,

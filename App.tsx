@@ -5,8 +5,7 @@ import Flashcard from './components/Flashcard'
 import CardStatus from './components/CardStatus'
 import { colors } from './lib/const'
 import Chip from './components/Chip'
-import { useState } from 'react'
-import PanContainer from './components/PanContainer'
+import { useEffect, useState } from 'react'
 
 export default function App() {
   const [allChips, setAllChips] = useState({
@@ -24,6 +23,8 @@ export default function App() {
   const [cards, setCards] = useState(
     schifffahrtsrecht.sort((a, b) => b.index - a.index)
   )
+
+  const [indexController, setIndexController] = useState(0)
 
   const calculateTop = (index: number, arrayLength: number) => {
     const reversedIndex = arrayLength - 1 - index
@@ -52,6 +53,10 @@ export default function App() {
   const removeCard = () => {
     setCards((prevCards) => prevCards.slice(0, prevCards.length - 1))
   }
+
+  useEffect(() => {
+    console.log('indexController', indexController)
+  }, [indexController])
 
   return (
     <View
@@ -109,10 +114,19 @@ export default function App() {
           {cards.map((card, index) => (
             <Flashcard
               key={card.index}
-              top={calculateTop(index, cards.length)}
-              backgroundColor={calculateColor(index, cards.length)}
-              onReleaseLeft={removeCard}
-              onReleaseRight={removeCard}
+              top={calculateTop(index + indexController, cards.length)}
+              backgroundColor={calculateColor(
+                index + indexController,
+                cards.length
+              )}
+              afterReleaseLeft={removeCard}
+              afterReleaseRight={removeCard}
+              onRelease={() => setIndexController(indexController + 1)}
+              afterRelease={() =>
+                setIndexController(
+                  indexController - 1 > 0 ? indexController - 1 : 0
+                )
+              }
             >
               <CardStatus
                 status="hidden"

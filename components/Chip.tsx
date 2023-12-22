@@ -29,8 +29,7 @@ const Chip: FC<Props> = ({ text, isActive, borderColors, onPress }: Props) => {
           paddingHorizontal: 16,
           paddingVertical: 8,
           borderRadius: 20,
-          borderColor: colors.white,
-          backgroundColor: isActive ? colors.gray[2] : colors.gray[1],
+          backgroundColor: isActive ? colors.gray[0] : colors.gray[1],
         }}
         onPress={onPress}
       >

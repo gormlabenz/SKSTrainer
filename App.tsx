@@ -59,7 +59,7 @@ export default function App() {
                 const newChips = chips.map((chip) => ({
                   ...chip,
                 }))
-                newChips[index].isActive = true
+                newChips[index].isActive = !newChips[index].isActive
                 setChips(newChips)
               }}
             />

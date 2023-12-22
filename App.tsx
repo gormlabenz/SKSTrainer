@@ -106,60 +106,32 @@ export default function App() {
           ))}
         </ScrollView>
         <View style={{ flex: 1, marginTop: 24, marginBottom: 24 }}>
-          {cards.map((card, index) =>
-            index === cards.length - 1 ? (
-              <PanContainer
-                key={card.index}
-                onReleaseLeft={removeCard}
-                onReleaseRight={removeCard}
+          {cards.map((card, index) => (
+            <Flashcard
+              key={card.index}
+              top={calculateTop(index, cards.length)}
+              backgroundColor={calculateColor(index, cards.length)}
+              onReleaseLeft={removeCard}
+              onReleaseRight={removeCard}
+            >
+              <CardStatus
+                status="hidden"
+                index={card.index}
+                length={cards.length}
+              />
+              <Text
+                style={{
+                  fontSize: 28,
+                  fontWeight: 'bold',
+                  marginTop: 28,
+                  marginBottom: 6,
+                  color: colors.white,
+                }}
               >
-                <Flashcard
-                  top={calculateTop(index, cards.length)}
-                  backgroundColor={calculateColor(index, cards.length)}
-                >
-                  <CardStatus
-                    status="hidden"
-                    index={card.index}
-                    length={cards.length}
-                  />
-                  <Text
-                    style={{
-                      fontSize: 28,
-                      fontWeight: 'bold',
-                      marginTop: 28,
-                      marginBottom: 6,
-                      color: colors.white,
-                    }}
-                  >
-                    {card.question}
-                  </Text>
-                </Flashcard>
-              </PanContainer>
-            ) : (
-              <Flashcard
-                key={card.index}
-                top={calculateTop(index, cards.length)}
-                backgroundColor={calculateColor(index, cards.length)}
-              >
-                <CardStatus
-                  status="hidden"
-                  index={card.index}
-                  length={cards.length}
-                />
-                <Text
-                  style={{
-                    fontSize: 28,
-                    fontWeight: 'bold',
-                    marginTop: 28,
-                    marginBottom: 6,
-                    color: colors.white,
-                  }}
-                >
-                  {card.question}
-                </Text>
-              </Flashcard>
-            )
-          )}
+                {card.question}
+              </Text>
+            </Flashcard>
+          ))}
         </View>
       </SafeAreaView>
     </View>

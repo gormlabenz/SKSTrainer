@@ -33,6 +33,7 @@ const PanContainer: FC<Props> = ({
           toValue: { x: 500, y: 0 },
           friction: 5,
           useNativeDriver: false,
+          tension: 100,
         }).start(() => onReleaseRight())
         console.log('right')
       } else if (gestureState.dx < -150) {
@@ -40,6 +41,7 @@ const PanContainer: FC<Props> = ({
           toValue: { x: -500, y: 0 },
           friction: 5,
           useNativeDriver: false,
+          tension: 100,
         }).start(() => onReleaseLeft())
         console.log('left')
       } else {
@@ -47,6 +49,7 @@ const PanContainer: FC<Props> = ({
           toValue: { x: 0, y: 0 },
           friction: 5,
           useNativeDriver: false,
+          tension: 100,
         }).start()
       }
     },

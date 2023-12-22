@@ -10,6 +10,12 @@ export const colors = {
     400: '#515B63', // Dunkles Grau
     450: '#434D53', // Interpoliert zwischen 400 und 500
     500: '#363D43', // Sehr dunkles Grau
+    550: '#2D3338', // Interpoliert für ein dunkleres Grau
+    600: '#24292E', // Noch dunkleres Grau
+    650: '#1B1F23', // Noch ein Schritt dunkler
+    700: '#121416', // Fast Schwarz
+    750: '#0A0B0C', // Noch näher an Schwarz
+    800: '#000000', // Schwarz
   },
   white: '#F7F7F7',
   green: '#52FF00',

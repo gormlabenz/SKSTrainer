@@ -13,7 +13,9 @@ interface Props {
 const Chip: FC<Props> = ({ text, isActive, borderColors, onPress }: Props) => {
   return (
     <LinearGradient
-      colors={borderColors ? borderColors : [colors.white, colors.white]}
+      colors={
+        borderColors ? borderColors : [colors.gray[600], colors.gray[600]]
+      }
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 1 }}
       style={{
@@ -29,7 +31,7 @@ const Chip: FC<Props> = ({ text, isActive, borderColors, onPress }: Props) => {
           paddingHorizontal: 16,
           paddingVertical: 8,
           borderRadius: 20,
-          backgroundColor: isActive ? colors.gray[300] : colors.gray[500],
+          backgroundColor: isActive ? colors.gray[300] : colors.gray[600],
         }}
         onPress={onPress}
       >

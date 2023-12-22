@@ -1,11 +1,18 @@
 import { StatusBar } from 'expo-status-bar'
-import { SafeAreaView, ScrollView, Text, View } from 'react-native'
+import {
+  Animated,
+  PanResponder,
+  SafeAreaView,
+  ScrollView,
+  Text,
+  View,
+} from 'react-native'
 import schifffahrtsrecht from './assets/schifffahrtsrecht.json'
 import Flashcard from './components/Flashcard'
 import CardStatus from './components/CardStatus'
 import { colors } from './lib/const'
 import Chip from './components/Chip'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 
 export default function App() {
   const [chips, setChips] = useState([
@@ -21,6 +28,39 @@ export default function App() {
     { text: 'Kapitänspatent', isActive: false },
   ])
 
+  const pan = useRef(
+    schifffahrtsrecht.map(() => new Animated.ValueXY())
+  ).current
+
+  const panResponder = schifffahrtsrecht.map((_, index) =>
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onPanResponderMove: (evt, gestureState) => {
+        handleMove(index, gestureState.dx, gestureState.dy)
+      },
+      onPanResponderRelease: () => {
+        Animated.spring(pan[index], {
+          toValue: { x: 0, y: 0 },
+          friction: 5,
+          useNativeDriver: false,
+        }).start()
+      },
+    })
+  )
+
+  const handleMove = (
+    index: number,
+    moveX: number,
+    moveY: number,
+    strength = 200
+  ) => {
+    const distanceMoved = Math.sqrt(moveX ** 2 + moveY ** 2)
+    const resistanceFactor = distanceMoved / strength + 1
+
+    pan[index].x.setValue(moveX / resistanceFactor)
+    pan[index].y.setValue(moveY / resistanceFactor)
+  }
+
   const calculateTop = (index: number, arrayLength: number) => {
     const reversedIndex = arrayLength - 1 - index
     if (reversedIndex < 4) {
@@ -33,15 +73,15 @@ export default function App() {
     const reversedIndex = arrayLength - 1 - index
     switch (reversedIndex) {
       case 0:
-        return colors.gray[400]
+        return colors.gray[600]
       case 1:
-        return colors.gray[350]
+        return colors.gray[550]
       case 2:
-        return colors.gray[300]
+        return colors.gray[500]
       case 3:
-        return colors.gray[250]
+        return colors.gray[450]
       default:
-        return colors.gray[200]
+        return colors.gray[400]
     }
   }
 
@@ -49,7 +89,7 @@ export default function App() {
     <View
       style={{
         flex: 1,
-        backgroundColor: colors.gray[500],
+        backgroundColor: colors.gray[700],
       }}
     >
       <StatusBar style="light" />
@@ -84,27 +124,41 @@ export default function App() {
         </ScrollView>
         <View style={{ flex: 1, marginTop: 24, marginBottom: 24 }}>
           {schifffahrtsrecht.reverse().map((data, index) => (
-            <Flashcard
-              top={calculateTop(index, schifffahrtsrecht.length)}
-              backgroundColor={calculateColor(index, schifffahrtsrecht.length)}
+            <Animated.View
+              key={index}
+              {...panResponder[index].panHandlers}
+              style={{
+                transform: pan[index].getTranslateTransform(),
+                position: 'absolute',
+                width: '100%',
+                height: '100%',
+              }}
             >
-              <CardStatus
-                status="hidden"
-                index={data.index}
-                length={schifffahrtsrecht.length}
-              />
-              <Text
-                style={{
-                  fontSize: 28,
-                  fontWeight: 'bold',
-                  marginTop: 28,
-                  marginBottom: 6,
-                  color: colors.white,
-                }}
+              <Flashcard
+                top={calculateTop(index, schifffahrtsrecht.length)}
+                backgroundColor={calculateColor(
+                  index,
+                  schifffahrtsrecht.length
+                )}
               >
-                {data.question}
-              </Text>
-            </Flashcard>
+                <CardStatus
+                  status="hidden"
+                  index={data.index}
+                  length={schifffahrtsrecht.length}
+                />
+                <Text
+                  style={{
+                    fontSize: 28,
+                    fontWeight: 'bold',
+                    marginTop: 28,
+                    marginBottom: 6,
+                    color: colors.white,
+                  }}
+                >
+                  {data.question}
+                </Text>
+              </Flashcard>
+            </Animated.View>
           ))}
         </View>
       </SafeAreaView>

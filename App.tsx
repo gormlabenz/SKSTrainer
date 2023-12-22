@@ -15,12 +15,12 @@ import Chip from './components/Chip'
 import { useEffect, useRef, useState } from 'react'
 
 export default function App() {
+  const [allChips, setAllChips] = useState({
+    text: 'Alle',
+    isActive: true,
+    borderColors: [colors.yellow, colors.green, colors.blue],
+  })
   const [chips, setChips] = useState([
-    {
-      text: 'Alle',
-      isActive: true,
-      borderColors: [colors.yellow, colors.green, colors.blue],
-    },
     { text: 'Schifffahrtsrecht', isActive: false },
     { text: 'Kapitänspatent', isActive: false },
     { text: 'Kapitänspatent', isActive: false },
@@ -111,12 +111,27 @@ export default function App() {
           }}
           showsHorizontalScrollIndicator={false}
         >
+          <Chip
+            text={allChips.text}
+            isActive={allChips.isActive}
+            borderColors={allChips.borderColors}
+            onPress={() => {
+              setAllChips({
+                ...allChips,
+                isActive: !allChips.isActive,
+              })
+              const newChips = chips.map((chip) => ({
+                ...chip,
+                isActive: !allChips.isActive,
+              }))
+              setChips(newChips)
+            }}
+          />
           {chips.map((chip, index) => (
             <Chip
               key={index}
               text={chip.text}
               isActive={chip.isActive}
-              borderColors={chip.borderColors}
               onPress={() => {
                 const newChips = chips.map((chip) => ({
                   ...chip,

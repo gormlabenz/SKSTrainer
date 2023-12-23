@@ -7,6 +7,7 @@ interface Props {
   backgroundColor: string
   top: number
   panEnabled: boolean
+  zIndex: number
   afterReleaseLeft: () => void
   afterReleaseRight: () => void
   onRelease: () => void
@@ -18,6 +19,7 @@ const Flashcard: FC<Props> = ({
   backgroundColor,
   top,
   panEnabled,
+  zIndex,
   afterReleaseLeft,
   afterReleaseRight,
   onRelease,
@@ -34,6 +36,7 @@ const Flashcard: FC<Props> = ({
 
   return (
     <PanContainer
+      zIndex={zIndex}
       panEnabled={panEnabled}
       afterReleaseLeft={afterReleaseLeft}
       afterReleaseRight={afterReleaseRight}

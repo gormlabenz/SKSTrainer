@@ -4,6 +4,7 @@ import { Animated, PanResponder, PanResponderInstance } from 'react-native'
 interface Props {
   children: React.ReactNode
   panEnabled: boolean
+  zIndex: number
   afterReleaseLeft: () => void
   afterReleaseRight: () => void
   onRelease: () => void
@@ -13,6 +14,7 @@ interface Props {
 const PanContainer: FC<Props> = ({
   children,
   panEnabled,
+  zIndex,
   afterReleaseLeft,
   afterReleaseRight,
   onRelease,
@@ -78,6 +80,7 @@ const PanContainer: FC<Props> = ({
     <Animated.View
       {...(panResponder && panResponder.panHandlers)}
       style={{
+        zIndex,
         transform: pan.getTranslateTransform(),
         position: 'absolute',
         width: '100%',

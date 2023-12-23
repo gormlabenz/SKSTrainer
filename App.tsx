@@ -6,6 +6,7 @@ import CardStatus from './components/CardStatus'
 import { colors } from './lib/const'
 import Chip from './components/Chip'
 import { useEffect, useState } from 'react'
+import { CardType } from './lib/types'
 
 export default function App() {
   const [allChips, setAllChips] = useState({
@@ -20,21 +21,19 @@ export default function App() {
     { text: 'Kapitänspatent', isActive: false },
     { text: 'Kapitänspatent', isActive: false },
   ])
-  const [cards, setCards] = useState(data.sort((a, b) => b.index - a.index))
+  const [cards, setCards] = useState<CardType[]>([])
 
   const [runningAnimations, setRunningAnimations] = useState(0)
 
   const calculateTop = (index: number, arrayLength: number) => {
-    const reversedIndex = arrayLength - 1 - index
-    if (reversedIndex < 4) {
-      return 24 * Math.exp(-reversedIndex)
+    if (index < 4) {
+      return 24 * Math.exp(-index)
     }
     return 0
   }
 
   const calculateColor = (index: number, arrayLength: number) => {
-    const reversedIndex = arrayLength - 1 - index
-    switch (reversedIndex) {
+    switch (index) {
       case 0:
         return colors.gray[600]
       case 1:
@@ -56,6 +55,10 @@ export default function App() {
   useEffect(() => {
     console.log('runningAnimations', runningAnimations)
   }, [runningAnimations])
+
+  useEffect(() => {
+    setCards(data)
+  }, [])
 
   return (
     <View
@@ -114,8 +117,9 @@ export default function App() {
             <Flashcard
               key={card.id}
               top={calculateTop(index + runningAnimations, cards.length)}
-              panEnabled={index + runningAnimations === cards.length - 1}
               backgroundColor={calculateColor(index, cards.length)}
+              zIndex={cards.length - index}
+              panEnabled={index + runningAnimations === cards.length - 1}
               afterReleaseLeft={removeCard}
               afterReleaseRight={removeCard}
               onRelease={() => {

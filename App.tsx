@@ -23,8 +23,6 @@ export default function App() {
   ])
   const [cards, setCards] = useState<CardType[]>([])
 
-  const [runningAnimations, setRunningAnimations] = useState(0)
-
   const calculateTop = (index: number) => {
     if (index < 4) {
       return 28 * Math.exp(-index)
@@ -57,15 +55,7 @@ export default function App() {
   const removeCard = () => {
     const newCards = cards.slice(1)
     setCards(newCards)
-    setRunningAnimations(runningAnimations - 1 > 0 ? runningAnimations - 1 : 0)
   }
-
-  useEffect(() => {
-    console.log(
-      'runningAnimations',
-      cards.map((card) => card.id)
-    )
-  }, [runningAnimations])
 
   useEffect(() => {
     setCards(data.slice(0, 10))
@@ -148,9 +138,7 @@ export default function App() {
               panEnabled={index === 0}
               afterReleaseLeft={removeCard}
               afterReleaseRight={removeCard}
-              onRelease={() => {
-                setRunningAnimations(1)
-              }}
+              onRelease={() => {}}
               afterRelease={() => {}}
             >
               <CardStatus

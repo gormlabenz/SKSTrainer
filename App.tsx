@@ -140,11 +140,11 @@ export default function App() {
         <View style={{ flex: 1, marginTop: 24, marginBottom: 24 }}>
           {cards.slice(0, 6).map((card, index) => (
             <Flashcard
-              key={card.id}
-              top={calculateTop(index - runningAnimations)}
-              backgroundColor={calculateColor(index - runningAnimations)}
-              scale={calculateScale(index - runningAnimations)}
-              zIndex={-index - runningAnimations}
+              key={`${card.id}-${index}`}
+              top={calculateTop(index)}
+              backgroundColor={calculateColor(index)}
+              scale={calculateScale(index)}
+              zIndex={-index}
               panEnabled={true}
               afterReleaseLeft={removeCard}
               afterReleaseRight={removeCard}

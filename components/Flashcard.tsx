@@ -72,6 +72,7 @@ const Flashcard: FC<Props> = ({
             paddingVertical: 24,
             top: animatedTop,
             transform: [{ scale: animatedScale }],
+            overflow: 'hidden',
           }}
         >
           {children}

@@ -7,6 +7,7 @@ import { colors } from './lib/const'
 import Chip from './components/Chip'
 import { useEffect, useState } from 'react'
 import { CardType } from './lib/types'
+import Answer from './components/Answer'
 
 export default function App() {
   const [allChips, setAllChips] = useState({
@@ -157,6 +158,7 @@ export default function App() {
               >
                 {card.question}
               </Text>
+              <Answer text={card.answer} />
             </Flashcard>
           ))}
         </View>

@@ -27,7 +27,7 @@ export default function App() {
 
   const calculateTop = (index: number) => {
     if (index < 4) {
-      return 24 * Math.exp(-index)
+      return 28 * Math.exp(-index)
     }
     return 0
   }
@@ -43,24 +43,28 @@ export default function App() {
       case 3:
         return colors.gray[450]
       default:
-        return colors.gray[400]
+        return colors.gray[600]
     }
   }
 
   const calculateScale = (index: number) => {
-    if (index < 4) {
+    if (index - runningAnimations < 4) {
       return 1 - 0.08 * index
     }
-    return 1
+    return 1 - 0.08 * 3
   }
 
   const removeCard = () => {
-    setCards((prevCards) => prevCards.slice(0, prevCards.length - 1))
+    const newCards = cards.slice(1)
+    setCards(newCards)
     setRunningAnimations(runningAnimations - 1 > 0 ? runningAnimations - 1 : 0)
   }
 
   useEffect(() => {
-    console.log('runningAnimations', runningAnimations)
+    console.log(
+      'runningAnimations',
+      cards.map((card) => card.id)
+    )
   }, [runningAnimations])
 
   useEffect(() => {
@@ -134,13 +138,13 @@ export default function App() {
           ))}
         </ScrollView>
         <View style={{ flex: 1, marginTop: 24, marginBottom: 24 }}>
-          {cards.slice(0, 4).map((card, index) => (
+          {cards.slice(0, 6).map((card, index) => (
             <Flashcard
               key={card.id}
-              top={calculateTop(index)}
-              backgroundColor={calculateColor(index)}
-              scale={calculateScale(index)}
-              zIndex={cards.length - index}
+              top={calculateTop(index - runningAnimations)}
+              backgroundColor={calculateColor(index - runningAnimations)}
+              scale={calculateScale(index - runningAnimations)}
+              zIndex={-index - runningAnimations}
               panEnabled={true}
               afterReleaseLeft={removeCard}
               afterReleaseRight={removeCard}

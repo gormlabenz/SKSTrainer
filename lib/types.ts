@@ -1,5 +1,12 @@
 export type CardType = {
+  chapter:
+    | 'Navigation'
+    | 'Schifffahrtsrecht'
+    | 'Seemannschaft I (Antriebsmaschine und unter Segel)'
+    | 'Seemannschaft II (Antriebsmaschine)'
+    | 'Wetterkunde'
   index: number
-  answer: string
+  label: string
   question: string
+  answer: string
 }

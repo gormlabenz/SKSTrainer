@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar'
 import { SafeAreaView, ScrollView, Text, View } from 'react-native'
-import schifffahrtsrecht from './lib/data/schifffahrtsrecht'
+import schifffahrtsrecht from './lib/data/Schifffahrtsrecht'
 import Flashcard from './components/Flashcard'
 import CardStatus from './components/CardStatus'
 import { colors } from './lib/const'

@@ -29,20 +29,17 @@ const Flashcard: FC<Props> = ({
 }: Props) => {
   const animatedTop = useRef(new Animated.Value(top)).current
   const animatedScale = useRef(new Animated.Value(scale)).current
-
+  const adjust = 700
   useEffect(() => {
     Animated.spring(animatedTop, {
-      toValue: top,
+      toValue: top + (scale * adjust) / 2 - adjust / 2,
       useNativeDriver: false,
     }).start()
-  }, [top])
-
-  useEffect(() => {
     Animated.spring(animatedScale, {
       toValue: scale,
       useNativeDriver: false,
     }).start()
-  }, [scale])
+  }, [top, scale])
 
   return (
     <PanContainer
@@ -74,7 +71,7 @@ const Flashcard: FC<Props> = ({
             height: '100%',
             paddingVertical: 24,
             top: animatedTop,
-            transform: [{ scaleX: animatedScale }],
+            transform: [{ scale: animatedScale }],
           }}
         >
           {children}

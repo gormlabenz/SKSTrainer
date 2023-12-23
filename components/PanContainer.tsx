@@ -43,9 +43,9 @@ const PanContainer: FC<Props> = ({
           onPanResponderRelease: (evt, gestureState) => {
             if (gestureState.dx > 150) {
               onRelease()
-              Animated.spring(pan, {
+              Animated.timing(pan, {
                 toValue: { x: 500, y: 0 },
-                friction: 5,
+                duration: 100,
                 useNativeDriver: false,
               }).start(() => {
                 afterReleaseRight()
@@ -53,9 +53,9 @@ const PanContainer: FC<Props> = ({
               })
             } else if (gestureState.dx < -150) {
               onRelease()
-              Animated.spring(pan, {
+              Animated.timing(pan, {
                 toValue: { x: -500, y: 0 },
-                friction: 5,
+                duration: 100,
                 useNativeDriver: false,
               }).start(() => {
                 afterReleaseLeft()

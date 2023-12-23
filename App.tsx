@@ -48,7 +48,7 @@ export default function App() {
   }
 
   const calculateScale = (index: number) => {
-    if (index - runningAnimations < 4) {
+    if (index < 4) {
       return 1 - 0.08 * index
     }
     return 1 - 0.08 * 3
@@ -138,14 +138,14 @@ export default function App() {
           ))}
         </ScrollView>
         <View style={{ flex: 1, marginTop: 24, marginBottom: 24 }}>
-          {cards.slice(0, 6).map((card, index) => (
+          {cards.map((card, index) => (
             <Flashcard
-              key={`${card.id}-${index}`}
+              key={card.id}
               top={calculateTop(index)}
               backgroundColor={calculateColor(index)}
               scale={calculateScale(index)}
               zIndex={-index}
-              panEnabled={true}
+              panEnabled={index === 0}
               afterReleaseLeft={removeCard}
               afterReleaseRight={removeCard}
               onRelease={() => {

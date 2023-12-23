@@ -6,6 +6,7 @@ interface Props {
   children: React.ReactNode
   backgroundColor: string
   top: number
+  panEnabled: boolean
   afterReleaseLeft: () => void
   afterReleaseRight: () => void
   onRelease: () => void
@@ -16,6 +17,7 @@ const Flashcard: FC<Props> = ({
   children,
   backgroundColor,
   top,
+  panEnabled,
   afterReleaseLeft,
   afterReleaseRight,
   onRelease,
@@ -32,6 +34,7 @@ const Flashcard: FC<Props> = ({
 
   return (
     <PanContainer
+      panEnabled={panEnabled}
       afterReleaseLeft={afterReleaseLeft}
       afterReleaseRight={afterReleaseRight}
       onRelease={onRelease}

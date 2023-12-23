@@ -24,7 +24,7 @@ export default function App() {
     schifffahrtsrecht.sort((a, b) => b.index - a.index)
   )
 
-  const [indexController, setIndexController] = useState(0)
+  const [runningAnimations, setRunningAnimations] = useState(0)
 
   const calculateTop = (index: number, arrayLength: number) => {
     const reversedIndex = arrayLength - 1 - index
@@ -52,11 +52,12 @@ export default function App() {
 
   const removeCard = () => {
     setCards((prevCards) => prevCards.slice(0, prevCards.length - 1))
+    setRunningAnimations(runningAnimations - 1 > 0 ? runningAnimations - 1 : 0)
   }
 
   useEffect(() => {
-    console.log('indexController', indexController)
-  }, [indexController])
+    console.log('runningAnimations', runningAnimations)
+  }, [runningAnimations])
 
   return (
     <View
@@ -114,15 +115,18 @@ export default function App() {
           {cards.map((card, index) => (
             <Flashcard
               key={card.index}
-              top={calculateTop(index + indexController, cards.length)}
-              backgroundColor={calculateColor(
-                index + indexController,
-                cards.length
-              )}
+              top={calculateTop(index + runningAnimations, cards.length)}
+              panEnabled={index + runningAnimations === cards.length - 1}
+              backgroundColor={calculateColor(index, cards.length)}
               afterReleaseLeft={removeCard}
               afterReleaseRight={removeCard}
-              onRelease={() => setIndexController(indexController + 1)}
-              afterRelease={() => setIndexController(indexController - 1)}
+              onRelease={() => {
+                setRunningAnimations(1 + runningAnimations)
+              }}
+              afterRelease={() => {
+                /* setRunningAnimations(runningAnimations - 1)
+                console.log('afterRelease', runningAnimations) */
+              }}
             >
               <CardStatus
                 status="hidden"

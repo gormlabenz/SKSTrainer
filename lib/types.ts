@@ -1,4 +1,5 @@
 export type CardType = {
+  id: string
   chapter:
     | 'Navigation'
     | 'Schifffahrtsrecht'
@@ -9,4 +10,5 @@ export type CardType = {
   label: string
   question: string
   answer: string
+  hidden: boolean
 }

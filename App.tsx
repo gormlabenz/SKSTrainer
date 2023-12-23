@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar'
 import { SafeAreaView, ScrollView, Text, View } from 'react-native'
-import schifffahrtsrecht from './lib/data/Schifffahrtsrecht'
+import data from './lib/data'
 import Flashcard from './components/Flashcard'
 import CardStatus from './components/CardStatus'
 import { colors } from './lib/const'
@@ -20,9 +20,7 @@ export default function App() {
     { text: 'Kapitänspatent', isActive: false },
     { text: 'Kapitänspatent', isActive: false },
   ])
-  const [cards, setCards] = useState(
-    schifffahrtsrecht.sort((a, b) => b.index - a.index)
-  )
+  const [cards, setCards] = useState(data.sort((a, b) => b.index - a.index))
 
   const [runningAnimations, setRunningAnimations] = useState(0)
 
@@ -114,7 +112,7 @@ export default function App() {
         <View style={{ flex: 1, marginTop: 24, marginBottom: 24 }}>
           {cards.map((card, index) => (
             <Flashcard
-              key={card.index}
+              key={card.id}
               top={calculateTop(index + runningAnimations, cards.length)}
               panEnabled={index + runningAnimations === cards.length - 1}
               backgroundColor={calculateColor(index, cards.length)}
@@ -131,7 +129,7 @@ export default function App() {
               <CardStatus
                 status="hidden"
                 index={card.index}
-                length={cards.length}
+                chapter={card.chapter}
               />
               <Text
                 style={{

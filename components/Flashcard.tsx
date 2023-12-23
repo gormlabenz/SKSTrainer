@@ -8,6 +8,7 @@ interface Props {
   top: number
   panEnabled: boolean
   zIndex: number
+  scale: number
   afterReleaseLeft: () => void
   afterReleaseRight: () => void
   onRelease: () => void
@@ -20,12 +21,14 @@ const Flashcard: FC<Props> = ({
   top,
   panEnabled,
   zIndex,
+  scale,
   afterReleaseLeft,
   afterReleaseRight,
   onRelease,
   afterRelease,
 }: Props) => {
   const animatedTop = useRef(new Animated.Value(top)).current
+  const animatedScale = useRef(new Animated.Value(scale)).current
 
   useEffect(() => {
     Animated.spring(animatedTop, {
@@ -33,6 +36,13 @@ const Flashcard: FC<Props> = ({
       useNativeDriver: false,
     }).start()
   }, [top])
+
+  useEffect(() => {
+    Animated.spring(animatedScale, {
+      toValue: scale,
+      useNativeDriver: false,
+    }).start()
+  }, [scale])
 
   return (
     <PanContainer
@@ -64,6 +74,7 @@ const Flashcard: FC<Props> = ({
             height: '100%',
             paddingVertical: 24,
             top: animatedTop,
+            transform: [{ scaleX: animatedScale }],
           }}
         >
           {children}

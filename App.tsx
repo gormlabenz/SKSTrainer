@@ -25,14 +25,14 @@ export default function App() {
 
   const [runningAnimations, setRunningAnimations] = useState(0)
 
-  const calculateTop = (index: number, arrayLength: number) => {
+  const calculateTop = (index: number) => {
     if (index < 4) {
       return 24 * Math.exp(-index)
     }
     return 0
   }
 
-  const calculateColor = (index: number, arrayLength: number) => {
+  const calculateColor = (index: number) => {
     switch (index) {
       case 0:
         return colors.gray[600]
@@ -47,6 +47,13 @@ export default function App() {
     }
   }
 
+  const calculateScale = (index: number) => {
+    if (index < 4) {
+      return 1 - 0.08 * index
+    }
+    return 1
+  }
+
   const removeCard = () => {
     setCards((prevCards) => prevCards.slice(0, prevCards.length - 1))
     setRunningAnimations(runningAnimations - 1 > 0 ? runningAnimations - 1 : 0)
@@ -57,8 +64,22 @@ export default function App() {
   }, [runningAnimations])
 
   useEffect(() => {
-    setCards(data)
+    setCards(data.slice(0, 10))
   }, [])
+
+  useEffect(() => {
+    if (chips.some((chip) => !chip.isActive)) {
+      setAllChips({
+        ...allChips,
+        isActive: false,
+      })
+    } else if (chips.every((chip) => chip.isActive) && !allChips.isActive) {
+      setAllChips({
+        ...allChips,
+        isActive: true,
+      })
+    }
+  }, [chips])
 
   return (
     <View
@@ -101,7 +122,7 @@ export default function App() {
             <Chip
               key={index}
               text={chip.text}
-              isActive={chip.isActive}
+              isActive={allChips.isActive ? true : chip.isActive}
               onPress={() => {
                 const newChips = chips.map((chip) => ({
                   ...chip,
@@ -113,22 +134,20 @@ export default function App() {
           ))}
         </ScrollView>
         <View style={{ flex: 1, marginTop: 24, marginBottom: 24 }}>
-          {cards.map((card, index) => (
+          {cards.slice(0, 4).map((card, index) => (
             <Flashcard
               key={card.id}
-              top={calculateTop(index + runningAnimations, cards.length)}
-              backgroundColor={calculateColor(index, cards.length)}
+              top={calculateTop(index)}
+              backgroundColor={calculateColor(index)}
+              scale={calculateScale(index)}
               zIndex={cards.length - index}
-              panEnabled={index + runningAnimations === cards.length - 1}
+              panEnabled={true}
               afterReleaseLeft={removeCard}
               afterReleaseRight={removeCard}
               onRelease={() => {
-                setRunningAnimations(1 + runningAnimations)
+                setRunningAnimations(1)
               }}
-              afterRelease={() => {
-                /* setRunningAnimations(runningAnimations - 1)
-                console.log('afterRelease', runningAnimations) */
-              }}
+              afterRelease={() => {}}
             >
               <CardStatus
                 status="hidden"
